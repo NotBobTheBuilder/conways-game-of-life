@@ -30,15 +30,15 @@ class CGOL(dict):
     def __getitem__(self, key):
         return self.get(key, False)
 
-    def only_neighbours(self, x, y):
-        return list(set(self.neighbours(x, y)) - {(x, y)})
-
     def neighbours(self, x, y):
+        return list(set(self.cells_3x3(x, y)) - {(x, y)})
+
+    def cells_3x3(self, x, y):
         return list(product(range(x-1,x+2), range(y-1,y+2)))
 
     def items(self):
-        neighbours = (self.neighbours(row, col) for row, col in self.keys())
-        uniques = set(elem for group in neighbours for elem in group)
+        cells_3x3 = (self.cells_3x3(row, col) for row, col in self.keys())
+        uniques = set(elem for group in cells_3x3 for elem in group)
 
         return ((cell, self[cell]) for cell in uniques)
 
@@ -46,7 +46,7 @@ class CGOL(dict):
       newgrid = {}
 
       for ((row, col), alive) in self.items():
-          neighbour_count = sum(self[n] for n in self.only_neighbours(row, col))
+          neighbour_count = sum(self[n] for n in self.neighbours(row, col))
           if alive:
               newgrid[(row, col)] = (2 <= neighbour_count <= 3)
           else:
@@ -58,4 +58,6 @@ class CGOL(dict):
         for ((row, col), cell) in grid.items():
             self[(row, col)] = cell
             if not cell and (row, col) in self:
+                # we don't need to store False values explicitly since our
+                # lookup in __getitem__ uses False as a default value
                 del self[(row, col)]
