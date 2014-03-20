@@ -13,7 +13,7 @@ class CGOL(dict):
         if len(self.keys()) == 0:
             raise StopIteration
 
-        self.merge(self.next_grid())
+        self.update(self.next_grid())
         return self
 
     def __repr__(self):
@@ -37,6 +37,12 @@ class CGOL(dict):
             if key in self:
                 del self[key]
 
+    def cell_survives(self, alive, neighbours):
+        return neighbours == 3 or alive and neighbours == 2
+
+    def neighbour_count(self, row, col):
+        return sum(self[n] for n in self.neighbours(row, col))
+
     def neighbours(self, row, col):
         return set(self.cells_3x3(row, col)) - {(row, col)}
 
@@ -48,14 +54,5 @@ class CGOL(dict):
                                    for cell in self.cells_3x3(*live)}
 
     def next_grid(self):
-      newgrid = {}
-
-      for (cell, alive) in self.cells_to_check():
-          neighbour_count = sum(self[n] for n in self.neighbours(*cell))
-          newgrid[cell] = neighbour_count == 3 or alive and neighbour_count == 2
-
-      return newgrid
-
-    def merge(self, grid):
-        for (cell, alive) in grid.items():
-            self[cell] = alive
+        return {cell: self.cell_survives(alive, self.neighbour_count(*cell))
+                      for (cell, alive) in self.cells_to_check()}
