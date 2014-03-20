@@ -30,6 +30,13 @@ class CGOL(dict):
     def __getitem__(self, key):
         return self.get(key, False)
 
+    def __setitem__(self, key, val):
+        if val:
+            dict.__setitem__(self, key, val)
+        else:
+            if key in self:
+                del self[key]
+
     def neighbours(self, row, col):
         return set(self.cells_3x3(row, col)) - {(row, col)}
 
@@ -52,7 +59,3 @@ class CGOL(dict):
     def merge(self, grid):
         for (cell, alive) in grid.items():
             self[cell] = alive
-            if not alive and cell in self:
-                # we don't need to store False values explicitly since our
-                # lookup in __getitem__ uses False as a default value
-                del self[cell]
