@@ -36,21 +36,21 @@ class CGOL(dict):
     def cells_3x3(self, x, y):
         return list(product(range(x-1,x+2), range(y-1,y+2)))
 
-    def items(self):
-        cells_3x3 = (self.cells_3x3(row, col) for row, col in self.keys())
-        uniques = set(elem for group in cells_3x3 for elem in group)
+    def cells_to_check(self):
+        cells_to_check = (self.cells_3x3(row, col) for row, col in self.keys())
+        uniques = set(elem for group in cells_to_check for elem in group)
 
         return ((cell, self[cell]) for cell in uniques)
 
     def next_grid(self):
       newgrid = {}
 
-      for ((row, col), alive) in self.items():
-          neighbour_count = sum(self[n] for n in self.neighbours(row, col))
+      for (position, alive) in self.cells_to_check():
+          neighbour_count = sum(self[n] for n in self.neighbours(*position))
           if alive:
-              newgrid[(row, col)] = (2 <= neighbour_count <= 3)
+              newgrid[position] = (2 <= neighbour_count <= 3)
           else:
-              newgrid[(row, col)] = (neighbour_count == 3)
+              newgrid[position] = (neighbour_count == 3)
 
       return newgrid
 
