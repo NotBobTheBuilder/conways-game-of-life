@@ -17,6 +17,18 @@ class CGOL(dict):
 
         return self
 
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        rows = []
+        for row in range(20):
+            r = (self[row, col] for col in range(80))
+            r = ("+" if c else "." for c in r)
+            rows.append("".join(r))
+
+        return "\n".join(rows)
+
     def __getitem__(self, key):
         return self.get(key, False)
 
