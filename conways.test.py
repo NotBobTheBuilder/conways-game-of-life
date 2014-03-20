@@ -26,5 +26,40 @@ class CGOL_Tests(unittest.TestCase):
         next(grid)
         self.assertEqual(False, grid[(0,0)])
 
+    def test_overpopulation_death(self):
+        grid = CGOL([
+            [True, True, True],
+            [True, True, True],
+            [True, True, True],
+        ])
+
+        next(grid)
+        self.assertEqual(False, grid[(1,1)])
+
+    def test_stable_population_survival(self):
+        grid = CGOL([
+            [True, True, True],
+        ])
+
+        for i in range(4):
+            next(grid)
+            self.assertEqual(True, grid[(0,1)])
+
+    def test_dead_cell_three_neighbours_born(self):
+        grid = CGOL([
+            [True, True, True]
+        ])
+
+        next(grid)
+        self.assertEqual(True, grid[(-1,1)])
+
+    def test_dead_cell_two_neighbours_dead(self):
+        grid = CGOL([
+            [True, True, False]
+        ])
+
+        next(grid)
+        self.assertEqual(False, grid[(-1,1)])
+
 if __name__ == "__main__":
     unittest.main()
