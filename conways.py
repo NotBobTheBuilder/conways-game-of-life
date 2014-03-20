@@ -28,12 +28,7 @@ class CGOL(dict):
 
     def items(self):
         neighbours = (self.neighbours(row, col) for row, col in self.keys())
-
-        uniques = set()
-
-        for group in neighbours:
-            for elem in group:
-                uniques.add(elem)
+        uniques = set(elem for group in neighbours for elem in group)
 
         return ((cell, self[cell]) for cell in uniques)
 
@@ -41,11 +36,11 @@ class CGOL(dict):
       newgrid = {}
 
       for ((row, col), alive) in self.items():
-          neighbours = sum(self[n] for n in self.only_neighbours(row, col))
+          neighbour_count = sum(self[n] for n in self.only_neighbours(row, col))
           if alive:
-              newgrid[(row, col)] = (2 <= neighbours <= 3)
+              newgrid[(row, col)] = (2 <= neighbour_count <= 3)
           else:
-              newgrid[(row, col)] = (neighbours == 3)
+              newgrid[(row, col)] = (neighbour_count == 3)
 
       return newgrid
 
