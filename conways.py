@@ -31,7 +31,7 @@ class CGOL(dict):
         return self.get(key, False)
 
     def only_neighbours(self, x, y):
-        return list(set(product(range(x-1,x+2), range(y-1,y+2))) - {(x, y)})
+        return list(set(self.neighbours(x, y)) - {(x, y)})
 
     def neighbours(self, x, y):
         return list(product(range(x-1,x+2), range(y-1,y+2)))
