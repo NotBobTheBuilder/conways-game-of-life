@@ -21,5 +21,10 @@ class CGOL_Tests(unittest.TestCase):
         self.assertEqual(False, grid[(0, 1)])
         self.assertEqual(True, grid[(2, 1)])
 
+    def test_underpopulation_death(self):
+        grid = CGOL([[True]])
+        next(grid)
+        self.assertEqual(False, grid[(0,0)])
+
 if __name__ == "__main__":
     unittest.main()
