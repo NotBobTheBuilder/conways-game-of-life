@@ -31,10 +31,10 @@ class CGOL(dict):
         return self.get(key, False)
 
     def neighbours(self, row, col):
-        return list(set(self.cells_3x3(row, col)) - {(row, col)})
+        return set(self.cells_3x3(row, col)) - {(row, col)}
 
     def cells_3x3(self, row, col):
-        return list(product(range(row-1, row+2), range(col-1, col+2)))
+        return product(range(row-1, row+2), range(col-1, col+2))
 
     def cells_to_check(self):
         return {(cell, self[cell]) for live in self.keys()
