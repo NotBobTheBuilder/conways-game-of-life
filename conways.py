@@ -14,7 +14,6 @@ class CGOL(dict):
             raise StopIteration
 
         self.merge(self.next_grid())
-
         return self
 
     def __repr__(self):
@@ -23,9 +22,8 @@ class CGOL(dict):
     def __str__(self):
         rows = []
         for row in range(20):
-            r = (self[row, col] for col in range(80))
-            r = ("+" if c else "." for c in r)
-            rows.append("".join(r))
+            r = (self[row, col] for col in range(70))
+            rows.append("".join("+" if c else "." for c in r))
 
         return "\n".join(rows)
 
