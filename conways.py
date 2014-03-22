@@ -7,14 +7,9 @@ class CGOL(dict):
             self[(row_index, col_index)] = alive
 
     def __iter__(self):
-        return self
-
-    def __next__(self):
-        if len(self.keys()) == 0:
-            raise StopIteration
-
-        self.update(self.next_grid())
-        return self
+        while len(self.keys()) > 0:
+            self.update(self.next_grid())
+            yield self
 
     def __repr__(self):
         return str(self)
