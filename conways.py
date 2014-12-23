@@ -11,15 +11,9 @@ class CGOL(dict):
             self.update(self.next_grid())
             yield self
 
-    def __repr__(self):
-        return str(self)
-
     def __str__(self):
-        rows = []
-        for row in range(20):
-            r = (self[row, col] for col in range(70))
-            rows.append("".join("+" if alive else "." for alive in r))
-
+        char = lambda alive: "+" if alive else "."
+        rows = ("".join(char(self[row, col]) for col in range(70)))
         return "\n".join(rows)
 
     def __getitem__(self, key):
@@ -51,3 +45,8 @@ class CGOL(dict):
     def next_grid(self):
         return {cell: self.cell_survives(alive, self.neighbour_count(*cell))
                       for (cell, alive) in self.cells_to_check()}
+
+if __name__ == "__main__":
+    game = iter(CGOL([[True for i in range(20)] for i in range(20)]))
+    for i in range(40):
+        next(game)
