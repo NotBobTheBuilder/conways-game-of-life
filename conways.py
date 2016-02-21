@@ -23,8 +23,7 @@ class CGOL(dict):
         if val:
             dict.__setitem__(self, key, val)
         else:
-            if key in self:
-                del self[key]
+            self.pop(key, None)
 
     def cell_survives(self, alive, neighbours):
         return neighbours == 3 or alive and neighbours == 2
