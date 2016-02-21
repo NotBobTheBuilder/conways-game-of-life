@@ -42,4 +42,4 @@ if __name__ == "__main__":
     game = CGOL([[(r + c) % 2 == 0 for c in range(20)] for r in range(20)])
     for round, grid in zip(range(40), game):
         print("===== round {} =====".format(round))
-        print(str(grid))
+        print(grid)
