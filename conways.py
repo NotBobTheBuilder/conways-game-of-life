@@ -46,6 +46,6 @@ class CGOL(dict):
                       for (cell, alive) in self.cells_to_check()}
 
 if __name__ == "__main__":
-    game = iter(CGOL([[True for i in range(20)] for i in range(20)]))
+    game = iter(CGOL([[True]*20]*20))
     for i in range(40):
         next(game)
