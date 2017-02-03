@@ -1,51 +1,46 @@
 from itertools import product
+from random import choice
 
-class CGOL(dict):
+def cells_3x3(row, col):
+    return set(product(range(row-1, row+2), range(col-1, col+2)))
+
+def neighbours(row, col):
+    return cells_3x3(row, col) - {(row, col)}
+
+class CGOL(object):
     def __init__(self, grid):
-        for row_index, row in enumerate(grid):
-          for col_index, alive in enumerate(row):
-            self[(row_index, col_index)] = alive
+        self.cells = {(row_i, col_i) for row_i, row in enumerate(grid)
+                                     for col_i, alive in enumerate(row)
+                                     if alive}
 
     def __iter__(self):
-        while len(self.keys()) > 0:
-            self.update(self.next_grid())
+        while self.cells:
+            self.cells = set(filter(self.cell_survives, self.cells_to_check()))
             yield self
 
     def __str__(self):
-        char = lambda alive: "+" if alive else "."
-        rows = ("".join(char(self[row, col]) for col in range(70)))
-        return "\n".join(rows)
+        char = lambda r, c: "+" if self.cell_alive((r, c)) else "."
+        return "\n".join("".join(char(r, c) for c in range(20))
+                                            for r in range(20))
 
-    def __getitem__(self, key):
-        return self.get(key, False)
+    def cell_alive(self, cell):
+        return cell in self.cells
 
-    def __setitem__(self, key, val):
-        if val:
-            dict.__setitem__(self, key, val)
-        else:
-            self.pop(key, None)
-
-    def cell_survives(self, alive, neighbours):
-        return neighbours == 3 or alive and neighbours == 2
+    def cell_survives(self, cell):
+        neighbours = self.neighbour_count(*cell)
+        return neighbours == 3 or neighbours == 2 and self.cell_alive(cell)
 
     def neighbour_count(self, row, col):
-        return sum(self[n] for n in self.neighbours(row, col))
-
-    def neighbours(self, row, col):
-        return set(self.cells_3x3(row, col)) - {(row, col)}
-
-    def cells_3x3(self, row, col):
-        return product(range(row-1, row+2), range(col-1, col+2))
+        return len(filter(self.cell_alive, neighbours(row, col)))
 
     def cells_to_check(self):
-        return {(cell, self[cell]) for live in self.keys()
-                                   for cell in self.cells_3x3(*live)}
-
-    def next_grid(self):
-        return {cell: self.cell_survives(alive, self.neighbour_count(*cell))
-                      for (cell, alive) in self.cells_to_check()}
+        return {neighbour for cell in self.cells
+                          for neighbour in cells_3x3(*cell)}
 
 if __name__ == "__main__":
-    game = iter(CGOL([[True]*20]*20))
-    for i in range(40):
-        next(game)
+    game = CGOL([[choice([True, False]) for r in range(20)] for c in range(20)])
+    print("==== init state ====")
+    print(grid)
+    for round, grid in zip(range(40), game):
+        print("===== round {} =====".format(round))
+        print(grid)
