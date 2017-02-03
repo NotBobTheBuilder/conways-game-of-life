@@ -19,9 +19,9 @@ class CGOL(object):
             yield self
 
     def __str__(self):
-        char = lambda r, c: "+" if self.cell_alive((r, c)) else "."
-        return "\n".join("".join(char(r, c) for c in range(20))
-                                            for r in range(20))
+        return '\n'.join(''.join('+' if self.cell_alive((r, c)) else '.'
+                                 for c in range(20))
+                                 for r in range(20))
 
     def cell_alive(self, cell):
         return cell in self.cells
@@ -40,7 +40,7 @@ class CGOL(object):
 if __name__ == "__main__":
     game = CGOL([[choice([True, False]) for r in range(20)] for c in range(20)])
     print("==== init state ====")
-    print(grid)
+    print(game)
     for round, grid in zip(range(40), game):
         print("===== round {} =====".format(round))
         print(grid)
