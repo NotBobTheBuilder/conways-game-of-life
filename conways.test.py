@@ -23,7 +23,9 @@ class CGOL_Tests(unittest.TestCase):
 
     def test_underpopulation_death(self):
         grid = CGOL([[True]])
-        next(iter(grid))
+        i = iter(grid)
+        next(i)
+        next(i)
         self.assertEqual(False, grid.cell_alive((0,0)))
 
     def test_overpopulation_death(self):
@@ -32,8 +34,9 @@ class CGOL_Tests(unittest.TestCase):
             [True, True, True],
             [True, True, True],
         ])
-
-        next(iter(grid))
+        i = iter(grid)
+        next(i)
+        next(i)
         self.assertEqual(False, grid.cell_alive((1,1)))
 
     def test_stable_population_survival(self):
@@ -49,16 +52,18 @@ class CGOL_Tests(unittest.TestCase):
         grid = CGOL([
             [True, True, True]
         ])
-
-        next(iter(grid))
+        i = iter(grid)
+        next(i)
+        next(i)
         self.assertEqual(True, grid.cell_alive((-1,1)))
 
     def test_dead_cell_two_neighbours_dead(self):
         grid = CGOL([
             [True, True, False]
         ])
-
-        next(iter(grid))
+        i = iter(grid)
+        next(i)
+        next(i)
         self.assertEqual(False, grid.cell_alive((-1,1)))
 
 if __name__ == "__main__":

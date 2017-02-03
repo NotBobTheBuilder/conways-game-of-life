@@ -14,6 +14,7 @@ class CGOL(object):
                                      if alive}
 
     def __iter__(self):
+        yield self
         while self.cells:
             self.cells = set(filter(self.cell_survives, self.cells_to_check()))
             yield self
@@ -31,7 +32,7 @@ class CGOL(object):
         return neighbours == 3 or neighbours == 2 and self.cell_alive(cell)
 
     def neighbour_count(self, row, col):
-        return len(filter(self.cell_alive, neighbours(row, col)))
+        return len(set(filter(self.cell_alive, neighbours(row, col))))
 
     def cells_to_check(self):
         return {neighbour for cell in self.cells
@@ -39,8 +40,6 @@ class CGOL(object):
 
 if __name__ == "__main__":
     game = CGOL([[choice([True, False]) for r in range(20)] for c in range(20)])
-    print("==== init state ====")
-    print(game)
     for round, grid in zip(range(40), game):
         print("===== round {} =====".format(round))
         print(grid)
